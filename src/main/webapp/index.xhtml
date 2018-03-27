@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>CDDA</title>
+</h:head>
+<h:body>
+    <h:form enctype="multipart/form-data">
+        <p:dialog header="Generowanie raportu" widgetVar="dlg" modal="true" height="25" resizable="false">
+            <h:graphicImage library="default" name="ajaxloadingbar.gif" />
+        </p:dialog>
+        <p:growl id="messages">
+            <p:autoUpdate />
+        </p:growl>
+        <p:panel id="genPanel" header="Generator CDDA">
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="name" value="Inicjały autora:" />
+                <p:inputText id="name" required="true" value="#{indexBacking.editedBy}" />
+                <p:outputLabel for="inst" value="Instytucja:" />
+                <p:inputText id="inst" required="true" value="#{indexBacking.institute}" />
+                <p:outputLabel for="xls" value="Plik XLS do aktualizacji:" />
+                <h:panelGrid columns="1">
+                    <p:fileUpload id="xls" required="true" value="#{indexBacking.uploadedXls}" mode="simple" auto="true" skinSimple="true" allowTypes="/(\.|\/)(xls)$/" />
+                    <h:outputText value="#{indexBacking.uploadedXls.fileName}" />
+                </h:panelGrid>
+            </h:panelGrid>
+        </p:panel>
+        <p:commandButton value="Generuj" ajax="false" actionListener="#{indexBacking.generateRaport}" onclick="PF('dlg').show();" style="margin-bottom:10px; margin-top:10px;" />
+        <p:panel id="rapPanel" header="Raport" rendered="#{indexBacking.generated}">
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="xlsGen" value="XLS:" />
+                <p:commandLink id="xlsGen" ajax="false" value="#{indexBacking.generatedXlsFileName}">
+                    <p:fileDownload value="#{indexBacking.generatedXls}" />
+                </p:commandLink>
+                <p:outputLabel for="gmlGen" value="GML:" />
+                <p:commandLink id="gmlGen" ajax="false" value="#{indexBacking.generatedGmlFileName}">
+                    <p:fileDownload value="#{indexBacking.generatedGml}" />
+                </p:commandLink>
+            </h:panelGrid>
+        </p:panel>
+    </h:form>
+</h:body>
+</html>
